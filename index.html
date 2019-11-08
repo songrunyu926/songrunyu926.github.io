@@ -151,6 +151,128 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-webpack开发环境搭建简单流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/08/webpack%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B/">webpack开发环境搭建简单流程</a>
+    </h1>
+  
+
+        
+        <a href="/2019/11/08/webpack%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B/" class="archive-article-date">
+  	<time datetime="2019-11-08T14:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="webpack开发环境通用流程"><a href="#webpack开发环境通用流程" class="headerlink" title="webpack开发环境通用流程"></a>webpack开发环境通用流程</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ul>
+<li>全局下载  npm i webpack webpack-cli -g</li>
+<li>项目中下载 npm i webpack webpack-cli -D</li>
+<li>因为webpack开始就实现了 es6模块化语法转化成浏览器认识的语法 ，所以开发环境下js不用编译</li>
+<li>json也可以解析  也不用编译</li>
+</ul>
+<h3 id="开发环境项目管理流程"><a href="#开发环境项目管理流程" class="headerlink" title="开发环境项目管理流程"></a>开发环境项目管理流程</h3><ol>
+<li>首先建立一个固定名称的webpack配置文件，文件名 webpack.config.js </li>
+<li>在配置文件中向外暴露一个配置对象</li>
+<li>里面分为五个属性： 入口 entry  出口 output  加载器 loader  插件 plugins 模式 mode</li>
+<li>entry   写一个入口文件名  一般以一个js文件作为入口</li>
+<li>output 出口 配置路径与想要生成的文件名  分开是因为后面会使用这个出口路径</li>
+<li>加载器 语法如下</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      <span class="comment">// loader</span></span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">'style-loader'</span>,</span><br><span class="line">          <span class="string">'css-loader'</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.html$/</span>,</span><br><span class="line">        use: <span class="string">'html-loader'</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      template: <span class="string">'./src/index.html'</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>plugins 插件  一搬使用new调用 <strong>注意  插件需要引入才能使用</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">    <span class="comment">//自动生成html文件 并且引入bundle 也就是出口文件</span></span><br><span class="line">    <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">      template: <span class="string">'./src/index.html'</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ],</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="8">
+<li>开发环境服务器</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">    contentBase: resolve(__dirname, <span class="string">'build'</span>), <span class="comment">//暴露出去的文件 可以请求的文件</span></span><br><span class="line">    compress: <span class="literal">true</span>,   <span class="comment">//开启gzip压缩   速度更快</span></span><br><span class="line">    port: <span class="number">3000</span>,			<span class="comment">//端口号</span></span><br><span class="line">    open: <span class="literal">true</span>,			<span class="comment">//自动打开网页</span></span><br><span class="line">    hot: <span class="literal">true</span>    <span class="comment">//开启热更新  js文件要用module.hot.accept</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//注意 当开启了模块热替换后  html文件就不更新了 改变html内容没效果 这时用双入口文件 解决这个问题</span></span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>生成source-map映射  方便找错 devtool: ‘cheap-module-eval-source-map’</li>
+<li>配置路径别名和省略扩展名 </li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">resolve: &#123;</span><br><span class="line">    alias: &#123; <span class="comment">// 配置路径别名: 简化路径的写法（缺点：没有路径提示）</span></span><br><span class="line">      <span class="string">'$css'</span>: resolve(__dirname, <span class="string">'src/css'</span>),</span><br><span class="line">      <span class="string">'$less'</span>: resolve(__dirname, <span class="string">'src/less'</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    extensions: [<span class="string">'.js'</span>, <span class="string">'.json'</span>, <span class="string">'.less'</span>, <span class="string">'.css'</span>] <span class="comment">// 可以省略文件后缀名</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="11">
+<li>开发构建目标</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target: <span class="string">'web'</span>  <span class="comment">//默认为web  以后开发node 可以改变</span></span><br></pre></td></tr></table></figure>
+
+<ol start="12">
+<li>externals 外部扩展</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">    jquery: <span class="string">'$'</span>, <span class="comment">// 让jquery不会webpack构建，需要手动使用外链script引入</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="开发环境常用loader及用法"><a href="#开发环境常用loader及用法" class="headerlink" title="开发环境常用loader及用法"></a>开发环境常用loader及用法</h3><h4 id="1-加载css资源-css-loader"><a href="#1-加载css资源-css-loader" class="headerlink" title="1 加载css资源 css-loader"></a>1 加载css资源 css-loader</h4><p>需要配合 style-loader 使用  将 JS 字符串生成为 style 节点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">        use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>],</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-加载css预处理文件资源-sass为例-sass-loader"><a href="#2-加载css预处理文件资源-sass为例-sass-loader" class="headerlink" title="2 加载css预处理文件资源 sass为例 sass-loader"></a>2 加载css预处理文件资源 sass为例 sass-loader</h4><p>需要 style-loader css-loader node-sass  sass-loader 四个loader</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.sass$/</span>,</span><br><span class="line">        use: [</span><br><span class="line">          <span class="string">"style-loader"</span>, <span class="comment">// 将 JS 字符串生成为 style 节点</span></span><br><span class="line">          <span class="string">"css-loader"</span>, <span class="comment">// 将 CSS 转化成 CommonJS 模块</span></span><br><span class="line">          <span class="string">"sass-loader"</span> <span class="comment">// 将 Sass 编译成 CSS，默认使用 Node Sass</span></span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-url-loader-加载样式文件中的url资源"><a href="#3-url-loader-加载样式文件中的url资源" class="headerlink" title="3 url-loader 加载样式文件中的url资源"></a>3 url-loader 加载样式文件中的url资源</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.(jpe?g|png|gif)/</span>,</span><br><span class="line">        use: [&#123;</span><br><span class="line">          loader: <span class="string">'url-loader'</span>,</span><br><span class="line">          options: &#123;</span><br><span class="line">            limit: <span class="number">10240</span>, <span class="comment">// 10kb以下用base64加载</span></span><br><span class="line">            name: <span class="string">'[hash:10].[ext]'</span>, <span class="comment">//编译的文件名</span></span><br><span class="line">            outputPath: <span class="string">'./img'</span>  <span class="comment">//结合出口路径  生成存放图片的出口路径</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;]</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-html-loader-加载html里的图片资源"><a href="#4-html-loader-加载html里的图片资源" class="headerlink" title="4 html-loader 加载html里的图片资源"></a>4 html-loader 加载html里的图片资源</h4><p>需要 file-loader配合</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.(html)$/</span>,</span><br><span class="line">        use: <span class="string">'html-loader'</span></span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-加载其他的静态资源-字体图标等"><a href="#5-加载其他的静态资源-字体图标等" class="headerlink" title="5 加载其他的静态资源 字体图标等"></a>5 加载其他的静态资源 字体图标等</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.(eot|svg|ttf|woff|woff2)$/</span>,</span><br><span class="line">        use: [&#123;</span><br><span class="line">          loader: <span class="string">'file-loader'</span>,</span><br><span class="line">          options: &#123;</span><br><span class="line">            outputPath: <span class="string">'font'</span>,</span><br><span class="line">            name: <span class="string">'[hash:10].[ext]'</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;]</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-eslint-loader-eslint语法检查"><a href="#6-eslint-loader-eslint语法检查" class="headerlink" title="6 eslint-loader eslint语法检查"></a>6 eslint-loader eslint语法检查</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">        loader: <span class="string">"eslint-loader"</span>,</span><br><span class="line">        options: &#123;</span><br><span class="line">          fix: <span class="literal">true</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//后面还需要配置eslint配置文件 .eslintrc 如果继承了某个规范 还要去下载这个规范 如aribnb-base规范</span></span><br><span class="line"><span class="comment">// npx install-peerdeps --dev eslint-config-airbnb-base</span></span><br></pre></td></tr></table></figure>
+
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/11/08/webpack%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E6%B5%81%E7%A8%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-搭建自己的博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
